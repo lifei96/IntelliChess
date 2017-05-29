@@ -31,6 +31,7 @@ class ChessGame:
         self.view = ChessView(self)
         self.view.showMsg("Red")
         self.view.draw_board(self.board)
+        self.view.root.update()
 
     def start(self, game_mode, AI_red=None, AI_green=None):
         # below added by Fei Li
@@ -43,6 +44,8 @@ class ChessGame:
                 self.change_player(not self.player_is_red)
             else:
                 self.view.showMsg('Please enter a correct AI name')
+                self.view.draw_board(self.board)
+                self.view.root.update()
                 self.quit()
                 return
         elif game_mode == 2:
@@ -53,6 +56,8 @@ class ChessGame:
                 self.view.draw_board(self.board)
             else:
                 self.view.showMsg('Please enter correct AI names')
+                self.view.draw_board(self.board)
+                self.view.root.update()
                 self.quit()
                 return
         self.view.start()
@@ -68,7 +73,6 @@ class ChessGame:
         self.view.draw_board(self.board)
         if self.check_end(self.board):
             self.view.root.update()
-            time.sleep(Const.delay)
             self.quit()
             return
         if change:
@@ -77,7 +81,6 @@ class ChessGame:
                 self.view.draw_board(self.board)
                 if self.check_end(self.board):
                     self.view.root.update()
-                    time.sleep(Const.delay)
                     self.quit()
                     return
                 self.change_player(not self.player_is_red)
@@ -85,6 +88,7 @@ class ChessGame:
     # below added by Fei Li
 
     def quit(self):
+        time.sleep(Const.end_delay)
         self.view.quit()
 
     def check_end(self, board):
@@ -100,11 +104,15 @@ class ChessGame:
         if not red_king:
             print '*****\n*****'
             self.view.showMsg('*****Green Wins at Round %d*****' % self.cur_round)
+            self.view.draw_board(self.board)
+            self.view.root.update()
             print '*****\n*****'
             return True
         elif not green_king:
             print '*****\n*****'
             self.view.showMsg('*****Red Wins at Round %d*****' % self.cur_round)
+            self.view.draw_board(self.board)
+            self.view.root.update()
             print '*****\n*****'
             return True
         return False
@@ -114,6 +122,8 @@ class ChessGame:
         if player_now:
             self.cur_round += 1
         self.view.showMsg("Red" if self.player_is_red else "Green")
+        self.view.draw_board(self.board)
+        self.view.root.update()
         if self.game_mode == 0:
             return False
         if self.game_mode == 1:
@@ -130,16 +140,34 @@ class ChessGame:
         return False
 
     def perform_AI(self, AI):
+        print '...AI is calculating...'
         move = AI.select_move(self.board, self.player_is_red)
         if move is not None:
             self.board.move(move[0], move[1], move[2], move[3])
         else:
             self.view.showMsg('Can not move')
+            self.view.draw_board(self.board)
+            self.view.root.update()
+            if self.player_is_red:
+                print '*****\n*****'
+                self.view.showMsg('*****Red can not move %d*****' % self.cur_round)
+                self.view.draw_board(self.board)
+                self.view.root.update()
+                print '*****\n*****'
+            else:
+                print '*****\n*****'
+                self.view.showMsg('*****Green can not move %d*****' % self.cur_round)
+                self.view.draw_board(self.board)
+                self.view.root.update()
+                print '*****\n*****'
             self.quit()
 
     def game_mode_2(self):
         self.change_player(not self.player_is_red)
+        if not self.view.root.winfo_exists():
+            return True
         self.view.draw_board(self.board)
+        self.view.root.update()
         if self.check_end(self.board):
             return True
         return False

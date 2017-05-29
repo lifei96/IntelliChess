@@ -44,3 +44,9 @@ class Shi(ChessPiece):
     #below added by Fei Li
     def name(self):
         return 'Shi'
+
+    def ID(self):
+        if self.is_red:
+            return 2
+        else:
+            return 3

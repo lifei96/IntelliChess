@@ -20,7 +20,7 @@ class Bing(ChessPiece):
         if abs(dx) + abs(dy) != 1:
             #print 'Too far'
             return False
-        if (self.is_red and dy == -1) or (self.is_red == False and dy==1):
+        if (self.is_red and dy == -1) or (self.is_red == False and dy == 1):
             #print 'cannot go back'
             return False
         if dy == 0:
@@ -46,3 +46,9 @@ class Bing(ChessPiece):
     #below added by Fei Li
     def name(self):
         return 'Bing'
+
+    def ID(self):
+        if self.is_red:
+            return 12
+        else:
+            return 13

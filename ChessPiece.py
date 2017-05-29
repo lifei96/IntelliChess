@@ -20,12 +20,13 @@ class ChessPiece:
                     moves.append((x,y))
         return moves
 
-    def move(self, board, dx, dy):
+    def move(self, board, dx, dy, is_calc=False):
         nx, ny = self.x + dx, self.y + dy
         if (nx, ny) in board.pieces:
             board.remove(nx, ny)
         board.remove(self.x, self.y)
-        print 'Move %s from (%d,%d) to (%d,%d)' % (self.name(), self.x, self.y, self.x+dx, self.y+dy)
+        if not is_calc:
+            print 'Move %s from (%d,%d) to (%d,%d)' % (self.name(), self.x, self.y, self.x+dx, self.y+dy)
         self.x += dx
         self.y += dy
         board.pieces[self.x, self.y] = self

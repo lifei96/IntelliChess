@@ -36,3 +36,9 @@ class Ma(ChessPiece):
     #below added by Fei Li
     def name(self):
         return 'Ma'
+
+    def ID(self):
+        if self.is_red:
+            return 8
+        else:
+            return 9

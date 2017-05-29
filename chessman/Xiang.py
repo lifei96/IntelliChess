@@ -38,3 +38,9 @@ class Xiang(ChessPiece):
     #below added by Fei Li
     def name(self):
         return 'Xiang'
+
+    def ID(self):
+        if self.is_red:
+            return 4
+        else:
+            return 5

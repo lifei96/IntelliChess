@@ -36,3 +36,9 @@ class Shuai(ChessPiece):
     #below added by Fei Li
     def name(self):
         return 'Shuai'
+
+    def ID(self):
+        if self.is_red:
+            return 0
+        else:
+            return 1

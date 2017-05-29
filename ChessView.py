@@ -45,9 +45,12 @@ class ChessView:
             time.sleep(Const.delay)
             while True:
                 game_end = self.control.game_mode_2()
+                if not self.root.winfo_exists():
+                    return
                 self.root.update()
-                time.sleep(Const.delay)
+                time.sleep(Const.end_delay)
                 if game_end:
+                    time.sleep(Const.delay)
                     self.quit()
                     return
         else:

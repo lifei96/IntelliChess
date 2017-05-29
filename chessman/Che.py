@@ -40,3 +40,9 @@ class Che(ChessPiece):
     #below added by Fei Li
     def name(self):
         return 'Che'
+
+    def ID(self):
+        if self.is_red:
+            return 6
+        else:
+            return 7

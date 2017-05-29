@@ -39,3 +39,9 @@ class Pao(ChessPiece):
     #below added by Fei Li
     def name(self):
         return 'Pao'
+
+    def ID(self):
+        if self.is_red:
+            return 10
+        else:
+            return 11
