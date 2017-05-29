@@ -21,14 +21,21 @@ class AI_base:
         if hash_val in self.eval_dict:
             return self.eval_dict[hash_val]
         eval_sum = 0
+        piece_num = len(board.pieces)
         for (x, y) in board.pieces:
             piece_name = board.pieces[x, y].name()
             is_red = board.pieces[x, y].is_red
             if is_red:
-                eval_sum += self.pieces_eval[piece_name]
-                eval_sum += self.position_eval[piece_name][x][y]
+                eval_sum += self.pieces_eval[piece_name] * (min(2, 32.0 / piece_num))
+                eval_sum += self.position_eval[piece_name][x][y] * (max(0.5, piece_num / 32.0))
             else:
-                eval_sum -= self.pieces_eval[piece_name]
-                eval_sum -= self.position_eval[piece_name][x][9 - y]
+                eval_sum -= self.pieces_eval[piece_name] * (min(2, 32.0 / piece_num))
+                eval_sum -= self.position_eval[piece_name][x][9 - y] * (max(0.5, piece_num / 32.0))
         self.eval_dict[hash_val] = eval_sum
         return eval_sum
+
+    def eval_move(self, board, x):
+        if (x[0] + x[2], x[1] + x[3]) in board.pieces:
+            piece_name = board.pieces[x[0] + x[2], x[1] + x[3]].name()
+            return self.pieces_eval[piece_name]
+        return 0

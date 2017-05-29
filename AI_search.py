@@ -27,7 +27,7 @@ class AI_search(AI_base):
             bst_v = -Const.inf
             bst_m = None
             moves = board.get_all_moves(is_red)
-            moves = sorted(moves, key=lambda x: x[1], reverse=True)
+            moves = sorted(moves, key=lambda x: self.eval_move(board, x), reverse=True)
             for move in moves:
                 new_board = self.next_board(board, move)
                 hash_val = hash(new_board)
@@ -46,7 +46,7 @@ class AI_search(AI_base):
             bst_v = Const.inf
             bst_m = None
             moves = board.get_all_moves(is_red)
-            moves = sorted(moves, key=lambda x: x[1], reverse=False)
+            moves = sorted(moves, key=lambda x: self.eval_move(board, x), reverse=True)
             for move in moves:
                 new_board = self.next_board(board, move)
                 hash_val = hash(new_board)

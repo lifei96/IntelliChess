@@ -39,6 +39,7 @@ class ChessGame:
         if game_mode == 1:
             if AI_red in self.AI_dict.AI:
                 self.AI_red = self.AI_dict.AI[AI_red]
+                print '-----Round %d-----' % self.cur_round
                 self.perform_AI(self.AI_red)
                 self.view.draw_board(self.board)
                 self.change_player(not self.player_is_red)
@@ -52,6 +53,7 @@ class ChessGame:
             if AI_red in self.AI_dict.AI and AI_green in self.AI_dict.AI:
                 self.AI_red = self.AI_dict.AI[AI_red]
                 self.AI_green = self.AI_dict.AI[AI_green]
+                print '-----Round %d-----' % self.cur_round
                 self.perform_AI(self.AI_red)
                 self.view.draw_board(self.board)
             else:
@@ -60,6 +62,8 @@ class ChessGame:
                 self.view.root.update()
                 self.quit()
                 return
+        else:
+            print '-----Round %d-----' % self.cur_round
         self.view.start()
 
     def callback(self, event):
@@ -77,6 +81,8 @@ class ChessGame:
             return
         if change:
             performed = self.change_player(not self.player_is_red)
+            if len(self.view.root.winfo_children()) == 0:
+                return
             if performed:
                 self.view.draw_board(self.board)
                 if self.check_end(self.board):
@@ -121,6 +127,7 @@ class ChessGame:
         self.player_is_red = player_now
         if player_now:
             self.cur_round += 1
+            print '-----Round %d-----' % self.cur_round
         self.view.showMsg("Red" if self.player_is_red else "Green")
         self.view.draw_board(self.board)
         self.view.root.update()
@@ -141,7 +148,9 @@ class ChessGame:
 
     def perform_AI(self, AI):
         print '...AI is calculating...'
+        START_TIME = time.clock()
         move = AI.select_move(self.board, self.player_is_red)
+        print '...Use %f s' % (time.clock() - START_TIME)
         if move is not None:
             self.board.move(move[0], move[1], move[2], move[3])
         else:
@@ -150,13 +159,13 @@ class ChessGame:
             self.view.root.update()
             if self.player_is_red:
                 print '*****\n*****'
-                self.view.showMsg('*****Red can not move %d*****' % self.cur_round)
+                self.view.showMsg('*****Red can not move at Round %d*****' % self.cur_round)
                 self.view.draw_board(self.board)
                 self.view.root.update()
                 print '*****\n*****'
             else:
                 print '*****\n*****'
-                self.view.showMsg('*****Green can not move %d*****' % self.cur_round)
+                self.view.showMsg('*****Green can not move at Round %d*****' % self.cur_round)
                 self.view.draw_board(self.board)
                 self.view.root.update()
                 print '*****\n*****'
@@ -164,7 +173,7 @@ class ChessGame:
 
     def game_mode_2(self):
         self.change_player(not self.player_is_red)
-        if not self.view.root.winfo_exists():
+        if len(self.view.root.winfo_children()) == 0:
             return True
         self.view.draw_board(self.board)
         self.view.root.update()

@@ -45,7 +45,7 @@ class ChessView:
             time.sleep(Const.delay)
             while True:
                 game_end = self.control.game_mode_2()
-                if not self.root.winfo_exists():
+                if len(self.root.winfo_children()) == 0:
                     return
                 self.root.update()
                 time.sleep(Const.end_delay)
@@ -59,6 +59,6 @@ class ChessView:
     # below added by Fei Li
 
     def quit(self):
-        self.root.destroy()
+        self.root.quit()
         #print '-----quit'
 

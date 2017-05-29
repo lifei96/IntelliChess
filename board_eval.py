@@ -2,7 +2,7 @@
 
 strength = {
     'Shuai': 100000,
-    'Shi': 120,
+    'Shi': 140,
     'Xiang': 120,
     'Che': 700,
     'Ma': 270,
