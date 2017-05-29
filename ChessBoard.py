@@ -62,9 +62,7 @@ class ChessBoard:
         pass
 
     def __hash__(self):
-        tmp = self.pieces.items()
-        tmp = [(x, y.ID()) for x, y in tmp]
-        return hash(frozenset(tmp))
+        return hash(frozenset([(x, y, self.pieces[x, y].ID()) for x, y in self.pieces]))
 
     def can_move(self, x, y, dx, dy):
         return self.pieces[x, y].can_move(self, dx, dy)

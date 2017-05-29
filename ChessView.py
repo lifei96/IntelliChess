@@ -18,6 +18,11 @@ class ChessView:
     piece_images = dict()
     move_images = []
 
+    def __init__(self, control):
+        self.control = control
+        if self.control.game_mode != 2:
+            self.can.bind('<Button-1>', self.control.callback)
+
     def draw_board(self, board):
         self.piece_images.clear()
         self.move_images = []
@@ -34,19 +39,12 @@ class ChessView:
         print msg
         self.root.title(msg)
 
-    def __init__(self, control):
-        self.control = control
-        if self.control.game_mode != 2:
-            self.can.bind('<Button-1>', self.control.callback)
-
     def start(self):
         if self.control.game_mode == 2:
             self.root.update()
             time.sleep(Const.delay)
             while True:
                 game_end = self.control.game_mode_2()
-                #if len(self.root.winfo_children()) == 0:
-                #    return
                 self.root.update()
                 time.sleep(Const.delay)
                 if game_end:
@@ -60,5 +58,3 @@ class ChessView:
 
     def quit(self):
         self.root.quit()
-        #print '-----quit'
-

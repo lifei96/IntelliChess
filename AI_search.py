@@ -28,22 +28,24 @@ class AI_search(AI_base):
             bst_m = None
             moves = board.get_all_moves(is_red)
             moves = sorted(moves, key=lambda x: self.eval_move(board, x, is_red), reverse=True)
-            # moves_tot = len(moves)
-            # moves_cnt = 0.0
             for move in moves:
-                # if (moves_cnt / moves_tot) > 0.7:
-                #     break
-                # moves_cnt += 1.0
-                new_board = self.next_board(board, move)
-                hash_val = hash(new_board)
-                if (hash_val, not is_red) in self.visited:
-                    continue
-                cur_v, cur_m = self.dfs(new_board, depth - 1, alpha, beta, not is_red)
-                if cur_v > bst_v:
-                    bst_v = cur_v
-                    bst_m = move
-                if bst_v > alpha:
-                    alpha = bst_v
+                nx = move[0] + move[2]
+                ny = move[1] + move[3]
+                removed_piece = None
+                if (nx, ny) in board.pieces:
+                    removed_piece = board.pieces[nx, ny]
+                board.move(move[0], move[1], move[2], move[3], is_calc=True)
+                hash_val = hash(board)
+                if (hash_val, not is_red) not in self.visited:
+                    cur_v, cur_m = self.dfs(board, depth - 1, alpha, beta, not is_red)
+                    if cur_v > bst_v:
+                        bst_v = cur_v
+                        bst_m = move
+                    if bst_v > alpha:
+                        alpha = bst_v
+                board.move(nx, ny, -move[2], -move[3], is_calc=True)
+                if removed_piece is not None:
+                    board.pieces[nx, ny] = removed_piece
                 if beta <= alpha:
                     break
             return bst_v, bst_m
@@ -53,16 +55,23 @@ class AI_search(AI_base):
             moves = board.get_all_moves(is_red)
             moves = sorted(moves, key=lambda x: self.eval_move(board, x, is_red), reverse=True)
             for move in moves:
-                new_board = self.next_board(board, move)
-                hash_val = hash(new_board)
-                if (hash_val, not is_red) in self.visited:
-                    continue
-                cur_v, cur_m = self.dfs(new_board, depth - 1, alpha, beta, not is_red)
-                if cur_v < bst_v:
-                    bst_v = cur_v
-                    bst_m = move
-                if bst_v < beta:
-                    beta = bst_v
+                nx = move[0] + move[2]
+                ny = move[1] + move[3]
+                removed_piece = None
+                if (nx, ny) in board.pieces:
+                    removed_piece = board.pieces[nx, ny]
+                board.move(move[0], move[1], move[2], move[3], is_calc=True)
+                hash_val = hash(board)
+                if (hash_val, not is_red) not in self.visited:
+                    cur_v, cur_m = self.dfs(board, depth - 1, alpha, beta, not is_red)
+                    if cur_v < bst_v:
+                        bst_v = cur_v
+                        bst_m = move
+                    if bst_v < beta:
+                        beta = bst_v
+                board.move(nx, ny, -move[2], -move[3], is_calc=True)
+                if removed_piece is not None:
+                    board.pieces[nx, ny] = removed_piece
                 if beta <= alpha:
                     break
             return bst_v, bst_m

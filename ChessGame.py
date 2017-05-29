@@ -71,7 +71,6 @@ class ChessGame:
             return
         if self.game_mode == 2:
             return
-        # print event.x, event.y
         rx, ry = real_coord(event.x), real_coord(event.y)
         change = self.board.select(rx, ry, self.player_is_red)
         self.view.draw_board(self.board)
@@ -81,8 +80,6 @@ class ChessGame:
             return
         if change:
             performed = self.change_player(not self.player_is_red)
-            #if len(self.view.root.winfo_children()) == 0:
-            #    return
             if performed:
                 self.view.draw_board(self.board)
                 if self.check_end(self.board):
@@ -163,12 +160,9 @@ class ChessGame:
                 self.view.showMsg('*****Green can not move at Round %d*****' % self.cur_round)
                 self.view.root.update()
                 print '*****\n*****'
-            #self.quit()
 
     def game_mode_2(self):
         self.change_player(not self.player_is_red)
-        #if len(self.view.root.winfo_children()) == 0:
-        #    return True
         self.view.draw_board(self.board)
         self.view.root.update()
         if self.check_end(self.board):
