@@ -81,8 +81,8 @@ class ChessGame:
             return
         if change:
             performed = self.change_player(not self.player_is_red)
-            if len(self.view.root.winfo_children()) == 0:
-                return
+            #if len(self.view.root.winfo_children()) == 0:
+            #    return
             if performed:
                 self.view.draw_board(self.board)
                 if self.check_end(self.board):
@@ -110,14 +110,12 @@ class ChessGame:
         if not red_king:
             print '*****\n*****'
             self.view.showMsg('*****Green Wins at Round %d*****' % self.cur_round)
-            self.view.draw_board(self.board)
             self.view.root.update()
             print '*****\n*****'
             return True
         elif not green_king:
             print '*****\n*****'
             self.view.showMsg('*****Red Wins at Round %d*****' % self.cur_round)
-            self.view.draw_board(self.board)
             self.view.root.update()
             print '*****\n*****'
             return True
@@ -129,7 +127,6 @@ class ChessGame:
             self.cur_round += 1
             print '-----Round %d-----' % self.cur_round
         self.view.showMsg("Red" if self.player_is_red else "Green")
-        self.view.draw_board(self.board)
         self.view.root.update()
         if self.game_mode == 0:
             return False
@@ -155,26 +152,23 @@ class ChessGame:
             self.board.move(move[0], move[1], move[2], move[3])
         else:
             self.view.showMsg('Can not move')
-            self.view.draw_board(self.board)
             self.view.root.update()
             if self.player_is_red:
                 print '*****\n*****'
                 self.view.showMsg('*****Red can not move at Round %d*****' % self.cur_round)
-                self.view.draw_board(self.board)
                 self.view.root.update()
                 print '*****\n*****'
             else:
                 print '*****\n*****'
                 self.view.showMsg('*****Green can not move at Round %d*****' % self.cur_round)
-                self.view.draw_board(self.board)
                 self.view.root.update()
                 print '*****\n*****'
-            self.quit()
+            #self.quit()
 
     def game_mode_2(self):
         self.change_player(not self.player_is_red)
-        if len(self.view.root.winfo_children()) == 0:
-            return True
+        #if len(self.view.root.winfo_children()) == 0:
+        #    return True
         self.view.draw_board(self.board)
         self.view.root.update()
         if self.check_end(self.board):
@@ -189,11 +183,15 @@ parser.add_argument('-m', dest='mode', action='store',
 parser.add_argument('-a', dest='ai', action='store',
                     nargs='*', default=[], type=str, required=False, help='Choose AI used in the game')
 parser.add_argument('-d', dest='delay', action='store',
-                    nargs='?', default=1, type=float, required=False,
+                    nargs='?', default=0, type=float, required=False,
                     help='Set how many seconds you want to delay after each move')
+parser.add_argument('-ed', dest='end_delay', action='store',
+                    nargs='?', default=4, type=float, required=False,
+                    help='Set how many seconds you want to delay after the end of game')
 args = parser.parse_args()
 
 Const.delay = args.delay
+Const.end_delay = args.end_delay
 
 if args.mode == 0:
     if len(args.ai) != 0:

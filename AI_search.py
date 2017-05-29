@@ -4,7 +4,7 @@ from AI_base import *
 
 class AI_search(AI_base):
 
-    max_depth = 4
+    max_depth = 3
 
     visited = {}
 
