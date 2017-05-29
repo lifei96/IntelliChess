@@ -4,7 +4,7 @@ from AI_base import *
 
 class AI_search(AI_base):
 
-    max_depth = 3
+    max_depth = 5
 
     visited = {}
 
@@ -15,7 +15,15 @@ class AI_search(AI_base):
         hash_val = hash(board)
         if (hash_val, is_red) in self.visited:
             return self.visited[(hash_val, is_red)]
-        value, move = self.dfs(board, self.max_depth, -Const.inf, Const.inf, is_red)
+        if len(board.pieces) > 18:
+            print len(board.pieces)
+            value, move = self.dfs(board, self.max_depth - 1, -Const.inf, Const.inf, is_red)
+        elif len(board.pieces) > 10:
+            print len(board.pieces)
+            value, move = self.dfs(board, self.max_depth, -Const.inf, Const.inf, is_red)
+        else:
+            print len(board.pieces)
+            value, move = self.dfs(board, self.max_depth + 1, -Const.inf, Const.inf, is_red)
         self.visited[(hash_val, is_red)] = move
         return move
 

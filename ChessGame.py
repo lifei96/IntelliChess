@@ -180,7 +180,7 @@ parser.add_argument('-d', dest='delay', action='store',
                     nargs='?', default=0, type=float, required=False,
                     help='Set how many seconds you want to delay after each move')
 parser.add_argument('-ed', dest='end_delay', action='store',
-                    nargs='?', default=4, type=float, required=False,
+                    nargs='?', default=3, type=float, required=False,
                     help='Set how many seconds you want to delay after the end of game')
 args = parser.parse_args()
 

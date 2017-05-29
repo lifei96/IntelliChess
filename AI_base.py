@@ -23,7 +23,7 @@ class AI_base:
         eval_sum = 0
         piece_num = len(board.pieces)
         for (x, y) in board.pieces:
-            piece_name = board.pieces[x, y].name()
+            piece_name = board.pieces[x, y].name
             is_red = board.pieces[x, y].is_red
             if is_red:
                 eval_sum += self.pieces_eval[piece_name] * (min(2, 32.0 / piece_num))
@@ -41,6 +41,6 @@ class AI_base:
         else:
             val += -move[3] * 10 + abs(move[2])
         if (move[0] + move[2], move[1] + move[3]) in board.pieces:
-            piece_name = board.pieces[move[0] + move[2], move[1] + move[3]].name()
+            piece_name = board.pieces[move[0] + move[2], move[1] + move[3]].name
             val += self.pieces_eval[piece_name] * 10
         return val

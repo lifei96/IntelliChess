@@ -4,10 +4,10 @@ strength = {
     'Shuai': 100000,
     'Shi': 140,
     'Xiang': 130,
-    'Che': 680,
-    'Ma': 260,
-    'Pao': 380,
-    'Bing': 30
+    'Che': 720,
+    'Ma': 300,
+    'Pao': 440,
+    'Bing': 40
 }
 
 position = {

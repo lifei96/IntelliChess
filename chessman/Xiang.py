@@ -15,10 +15,15 @@ class Xiang(ChessPiece):
             else:
                 return "images/BB.gif"
 
-
     def can_move(self, board, dx, dy):
         x,y = self.x, self.y
         nx, ny = x + dx, y + dy
+        if nx < 0 or nx > 8 or ny < 0 or ny > 9:
+            return False
+        if (nx, ny) in board.pieces:
+            if board.pieces[nx, ny].is_red == self.is_red:
+                #print 'blocked by yourself'
+                return False
         if (self.is_red and ny > 4) or (self.is_red== False and ny <5):
             #print 'no river cross'
             return False
@@ -32,15 +37,21 @@ class Xiang(ChessPiece):
             return False
         return True
 
+    #below added by Fei Li
+
     def __init__(self, x, y, is_red):
         ChessPiece.__init__(self, x, y, is_red)
-
-    #below added by Fei Li
-    def name(self):
-        return 'Xiang'
-
-    def ID(self):
+        self.name = 'Xiang'
         if self.is_red:
-            return 4
+            self.ID = 4
         else:
-            return 5
+            self.ID = 5
+        self.dx = [-2, -2, 2, 2]
+        self.dy = [-2, 2, -2, 2]
+
+    def get_moves(self, board):
+        moves = []
+        for i in range(4):
+            if self.can_move(board, self.dx[i], self.dy[i]):
+                moves.append((self.x, self.y, self.dx[i], self.dy[i]))
+        return moves

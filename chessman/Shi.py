@@ -1,4 +1,3 @@
-__author__ = 'Zhaoliang'
 from ChessPiece import ChessPiece
 
 
@@ -16,9 +15,14 @@ class Shi(ChessPiece):
             else:
                 return "images/BA.gif"
 
-
     def can_move(self, board, dx, dy):
         nx, ny = self.x + dx, self.y + dy
+        if nx < 0 or nx > 8 or ny < 0 or ny > 9:
+            return False
+        if (nx, ny) in board.pieces:
+            if board.pieces[nx, ny].is_red == self.is_red:
+                #print 'blocked by yourself'
+                return False
         x, y = self.x, self.y
         if not (self.is_red and 3 <= nx <=5 and 0<= ny <=2) and\
                 not (self.is_red == False and 3 <= nx <= 5 and 7 <= ny <= 9):
@@ -38,15 +42,21 @@ class Shi(ChessPiece):
             return False
         return True
 
+    #below added by Fei Li
+
     def __init__(self, x, y, is_red):
         ChessPiece.__init__(self, x, y, is_red)
-
-    #below added by Fei Li
-    def name(self):
-        return 'Shi'
-
-    def ID(self):
+        self.name = 'Shi'
         if self.is_red:
-            return 2
+            self.ID = 2
         else:
-            return 3
+            self.ID = 3
+        self.dx = [-1, -1, 1, 1]
+        self.dy = [-1, 1, -1, 1]
+
+    def get_moves(self, board):
+        moves = []
+        for i in range(4):
+            if self.can_move(board, self.dx[i], self.dy[i]):
+                moves.append((self.x, self.y, self.dx[i], self.dy[i]))
+        return moves

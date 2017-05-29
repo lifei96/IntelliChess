@@ -1,5 +1,5 @@
 
 
-end_delay = 4
+end_delay = 3
 delay = 0
 inf = 20000

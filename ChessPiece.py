@@ -26,7 +26,7 @@ class ChessPiece:
             board.remove(nx, ny)
         board.remove(self.x, self.y)
         if not is_calc:
-            print 'Move %s from (%d,%d) to (%d,%d)' % (self.name(), self.x, self.y, self.x+dx, self.y+dy)
+            print 'Move %s from (%d,%d) to (%d,%d)' % (self.name, self.x, self.y, self.x+dx, self.y+dy)
         self.x += dx
         self.y += dy
         board.pieces[self.x, self.y] = self
@@ -46,7 +46,7 @@ class ChessPiece:
         return cnt
 
     # below added by Fei Li
-    def get_moves(self, board):
+    def get_moves_slow(self, board):
         moves = []
         for x in xrange(9):
             for y in xrange(10):

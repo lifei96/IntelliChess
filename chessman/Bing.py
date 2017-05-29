@@ -28,6 +28,8 @@ class Bing(ChessPiece):
                 #print 'behind river'
                 return False
         nx, ny = self.x + dx, self.y + dy
+        if nx < 0 or nx > 8 or ny < 0 or ny > 9:
+            return False
         if (nx, ny) in board.pieces:
             if board.pieces[nx, ny].is_red == self.is_red:
                 #print 'blocked by yourself'
@@ -37,18 +39,24 @@ class Bing(ChessPiece):
                 #print 'kill a chessman'
         return True
 
-    def __init__(self, x, y, is_red):
-        ChessPiece.__init__(self, x, y, is_red)
-
     def display(self):
         sys.stdout.write('B')
 
     #below added by Fei Li
-    def name(self):
-        return 'Bing'
 
-    def ID(self):
+    def __init__(self, x, y, is_red):
+        ChessPiece.__init__(self, x, y, is_red)
+        self.name = 'Bing'
         if self.is_red:
-            return 12
+            self.ID = 12
         else:
-            return 13
+            self.ID = 13
+        self.dx = [0, 0, -1, 1]
+        self.dy = [-1, 1, 0, 0]
+
+    def get_moves(self, board):
+        moves = []
+        for i in range(4):
+            if self.can_move(board, self.dx[i], self.dy[i]):
+                moves.append((self.x, self.y, self.dx[i], self.dy[i]))
+        return moves
