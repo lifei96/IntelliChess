@@ -150,7 +150,7 @@ class ChessGame:
         print '...AI is calculating...'
         START_TIME = time.clock()
         move = AI.select_move(self.board, self.player_is_red)
-        print '...Use %f s' % (time.clock() - START_TIME)
+        print '...Use %fs...' % (time.clock() - START_TIME)
         if move is not None:
             self.board.move(move[0], move[1], move[2], move[3])
         else:

@@ -34,8 +34,13 @@ class AI_base:
         self.eval_dict[hash_val] = eval_sum
         return eval_sum
 
-    def eval_move(self, board, x):
-        if (x[0] + x[2], x[1] + x[3]) in board.pieces:
-            piece_name = board.pieces[x[0] + x[2], x[1] + x[3]].name()
-            return self.pieces_eval[piece_name]
-        return 0
+    def eval_move(self, board, move, is_red):
+        val = 0
+        if is_red:
+            val += move[3] * 10 + abs(move[2])
+        else:
+            val += -move[3] * 10 + abs(move[2])
+        if (move[0] + move[2], move[1] + move[3]) in board.pieces:
+            piece_name = board.pieces[move[0] + move[2], move[1] + move[3]].name()
+            val += self.pieces_eval[piece_name] * 10
+        return val

@@ -4,7 +4,7 @@ from AI_base import *
 
 class AI_search(AI_base):
 
-    max_depth = 3
+    max_depth = 4
 
     visited = {}
 
@@ -27,8 +27,13 @@ class AI_search(AI_base):
             bst_v = -Const.inf
             bst_m = None
             moves = board.get_all_moves(is_red)
-            moves = sorted(moves, key=lambda x: self.eval_move(board, x), reverse=True)
+            moves = sorted(moves, key=lambda x: self.eval_move(board, x, is_red), reverse=True)
+            # moves_tot = len(moves)
+            # moves_cnt = 0.0
             for move in moves:
+                # if (moves_cnt / moves_tot) > 0.7:
+                #     break
+                # moves_cnt += 1.0
                 new_board = self.next_board(board, move)
                 hash_val = hash(new_board)
                 if (hash_val, not is_red) in self.visited:
@@ -46,7 +51,7 @@ class AI_search(AI_base):
             bst_v = Const.inf
             bst_m = None
             moves = board.get_all_moves(is_red)
-            moves = sorted(moves, key=lambda x: self.eval_move(board, x), reverse=True)
+            moves = sorted(moves, key=lambda x: self.eval_move(board, x, is_red), reverse=True)
             for move in moves:
                 new_board = self.next_board(board, move)
                 hash_val = hash(new_board)
