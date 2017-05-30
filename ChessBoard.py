@@ -118,6 +118,6 @@ class ChessBoard:
 
     def deepcopy(self):
         new_board = ChessBoard()
+        new_board.pieces.clear()
         new_board.pieces = copy.deepcopy(self.pieces)
-        new_board.selected_piece = copy.deepcopy(self.selected_piece)
         return new_board

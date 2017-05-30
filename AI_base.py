@@ -1,3 +1,4 @@
+# Base class for AI by Fei Li
 import board_eval
 
 

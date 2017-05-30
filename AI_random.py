@@ -1,3 +1,4 @@
+# random AI by Fei Li
 from AI_base import *
 import random
 
