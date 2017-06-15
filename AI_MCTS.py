@@ -8,7 +8,7 @@ import random
 
 class AI_MCTS(AI_base):
 
-    def __init__(self, C=1.1, time_limit=5, R=20, E=10):
+    def __init__(self, C=0.9, time_limit=5, R=15, E=5):
         AI_base.__init__(self)
         self.C = C
         self.time_limit = time_limit

@@ -109,12 +109,16 @@ class ChessGame:
             self.view.showMsg('*****Green Wins at Round %d*****' % self.cur_round)
             self.view.root.update()
             print '*****\n*****'
+            with open('GameLog.txt', 'a') as f:
+                f.write('%d\t%d\n' % (0, self.cur_round))
             return True
         elif not green_king:
             print '*****\n*****'
             self.view.showMsg('*****Red Wins at Round %d*****' % self.cur_round)
             self.view.root.update()
             print '*****\n*****'
+            with open('GameLog.txt', 'a') as f:
+                f.write('%d\t%d\n' % (1, self.cur_round))
             return True
         return False
 

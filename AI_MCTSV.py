@@ -8,7 +8,7 @@ import random
 
 class AI_MCTSV(AI_base):
 
-    def __init__(self, C=1.1, time_limit=5, R=10, E=10):
+    def __init__(self, C=0.98, time_limit=5, R=10, E=10):
         AI_base.__init__(self)
         self.C = C
         self.time_limit = time_limit
@@ -58,7 +58,7 @@ class AI_MCTSV(AI_base):
         return val
 
     def eval_draw(self, board):
-        tot = 2200.0
+        tot = 2000.0
         val = self.eval_board(board)
         val_norm = math.sqrt(min(abs(val) / tot, 1.0)) * 0.5
         if val >= 0:
