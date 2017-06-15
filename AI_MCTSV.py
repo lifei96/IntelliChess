@@ -1,4 +1,4 @@
-# MCTS with UCB equation by Fei Li
+# MCTSV by Fei Li
 import Const
 from AI_base import *
 import time
@@ -6,9 +6,9 @@ import math
 import random
 
 
-class AI_MCTS(AI_base):
+class AI_MCTSV(AI_base):
 
-    def __init__(self, C=1.1, time_limit=5, R=20, E=10):
+    def __init__(self, C=1.1, time_limit=5, R=10, E=10):
         AI_base.__init__(self)
         self.C = C
         self.time_limit = time_limit
@@ -22,6 +22,49 @@ class AI_MCTS(AI_base):
         self.visited = set()
         self.seq = set()
         self.vis = set()
+
+    def next_board(self, board, move):
+        new_board = board.deepcopy()
+        new_board.move(move[0], move[1], move[2], move[3], is_calc=True)
+        return new_board
+
+    def eval_board(self, board):
+        hash_val = board.hash(True)
+        if hash_val in self.eval_dict:
+            return self.eval_dict[hash_val]
+        eval_sum = 0
+        piece_num = len(board.pieces)
+        for (x, y) in board.pieces:
+            piece_name = board.pieces[x, y].name
+            is_red = board.pieces[x, y].is_red
+            if is_red:
+                eval_sum += self.pieces_eval[piece_name] * (min(2, 32.0 / piece_num))
+                eval_sum += self.position_eval[piece_name][x][y] * (max(0.5, piece_num / 32.0))
+            else:
+                eval_sum -= self.pieces_eval[piece_name] * (min(2, 32.0 / piece_num))
+                eval_sum -= self.position_eval[piece_name][x][9 - y] * (max(0.5, piece_num / 32.0))
+        self.eval_dict[hash_val] = eval_sum
+        return eval_sum
+
+    def eval_move(self, board, move, is_red):
+        val = self.position_eval[board.pieces[move[0], move[1]].name][move[0] + move[2]][move[1] + move[3]]*10
+        if is_red:
+            val += move[3] * 10 + abs(move[2])
+        else:
+            val += -move[3] * 10 + abs(move[2])
+        if (move[0] + move[2], move[1] + move[3]) in board.pieces:
+            piece_name = board.pieces[move[0] + move[2], move[1] + move[3]].name
+            val += self.pieces_eval[piece_name] * 10
+        return val
+
+    def eval_draw(self, board):
+        tot = 2200.0
+        val = self.eval_board(board)
+        val_norm = math.sqrt(min(abs(val) / tot, 1.0)) * 0.5
+        if val >= 0:
+            return 0.5 + val_norm
+        else:
+            return 0.5 - val_norm
 
     def select_move(self, board, is_red):
         return self.UCT_search(board, is_red)
@@ -132,7 +175,7 @@ class AI_MCTS(AI_base):
                 board.move(move[0], move[1], move[2], move[3], is_calc=True)
                 next_node = self.get_node(board, not is_red)
                 if next_node not in self.visited and next_node not in self.seq:
-                    res = self.simulation(board, not is_red, 0)
+                    res, eval_draw = self.simulation(board, not is_red, 0)
                     if res != -1:
                         v_delta += res
                         n_delta += 1
@@ -142,7 +185,8 @@ class AI_MCTS(AI_base):
                         self.V[next_node] += res
                         self.N[next_node] += 1
                     else:
-                        v_delta += 0.5
+                        print eval_draw
+                        v_delta += eval_draw
                         n_delta += 1
                 board.move(nx, ny, -move[2], -move[3], is_calc=True)
                 if removed_piece is not None:
@@ -159,7 +203,7 @@ class AI_MCTS(AI_base):
 
     def simulation(self, board, is_red, cnt):
         if cnt > self.R:
-            return -1
+            return -1, self.eval_draw(board)
         node = self.get_node(board, is_red)
         self.vis.clear()
         self.vis.add(node)
@@ -175,17 +219,17 @@ class AI_MCTS(AI_base):
                 board.move(move[0], move[1], move[2], move[3], is_calc=True)
                 next_node = self.get_node(board, not is_red)
                 if next_node not in self.visited and next_node not in self.seq and next_node not in self.vis:
-                    res = self.simulation(board, not is_red, cnt + 1)
+                    res, eval_board = self.simulation(board, not is_red, cnt + 1)
                     board.move(nx, ny, -move[2], -move[3], is_calc=True)
                     if removed_piece is not None:
                         board.pieces[nx, ny] = removed_piece
-                    return res
+                    return res, eval_board
                 board.move(nx, ny, -move[2], -move[3], is_calc=True)
                 if removed_piece is not None:
                     board.pieces[nx, ny] = removed_piece
-            return -1
+            return -1, self.eval_draw(board)
         else:
-            return ter
+            return ter, ter
 
     def pick(self, board, is_red):
         node = self.get_node(board, is_red)
@@ -222,37 +266,3 @@ class AI_MCTS(AI_base):
         if red_king:
             return 1
         return 0
-
-    def next_board(self, board, move):
-        new_board = board.deepcopy()
-        new_board.move(move[0], move[1], move[2], move[3], is_calc=True)
-        return new_board
-
-    def eval_board(self, board):
-        hash_val = board.hash(True)
-        if hash_val in self.eval_dict:
-            return self.eval_dict[hash_val]
-        eval_sum = 0
-        piece_num = len(board.pieces)
-        for (x, y) in board.pieces:
-            piece_name = board.pieces[x, y].name
-            is_red = board.pieces[x, y].is_red
-            if is_red:
-                eval_sum += self.pieces_eval[piece_name] * (min(2, 32.0 / piece_num))
-                eval_sum += self.position_eval[piece_name][x][y] * (max(0.5, piece_num / 32.0))
-            else:
-                eval_sum -= self.pieces_eval[piece_name] * (min(2, 32.0 / piece_num))
-                eval_sum -= self.position_eval[piece_name][x][9 - y] * (max(0.5, piece_num / 32.0))
-        self.eval_dict[hash_val] = eval_sum
-        return eval_sum
-
-    def eval_move(self, board, move, is_red):
-        val = self.position_eval[board.pieces[move[0], move[1]].name][move[0] + move[2]][move[1] + move[3]]*10
-        if is_red:
-            val += move[3] * 10 + abs(move[2])
-        else:
-            val += -move[3] * 10 + abs(move[2])
-        if (move[0] + move[2], move[1] + move[3]) in board.pieces:
-            piece_name = board.pieces[move[0] + move[2], move[1] + move[3]].name
-            val += self.pieces_eval[piece_name] * 10
-        return val

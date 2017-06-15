@@ -4,9 +4,9 @@ strength = {
     'Shuai': 100000,
     'Shi': 120,
     'Xiang': 120,
-    'Che': 600,
-    'Ma': 270,
-    'Pao': 310,
+    'Che': 620,
+    'Ma': 260,
+    'Pao': 380,
     'Bing': 30
 }
 

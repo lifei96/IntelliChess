@@ -18,7 +18,7 @@ class AI_base:
         return new_board
 
     def eval_board(self, board):
-        hash_val = hash(board)
+        hash_val = board.hash(True)
         if hash_val in self.eval_dict:
             return self.eval_dict[hash_val]
         eval_sum = 0
@@ -36,7 +36,7 @@ class AI_base:
         return eval_sum
 
     def eval_move(self, board, move, is_red):
-        val = 0
+        val = self.position_eval[board.pieces[move[0], move[1]].name][move[0] + move[2]][move[1] + move[3]]*10
         if is_red:
             val += move[3] * 10 + abs(move[2])
         else:

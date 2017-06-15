@@ -61,9 +61,6 @@ class ChessBoard:
     def __init__(self):
         pass
 
-    def __hash__(self):
-        return hash(frozenset([(x, y, self.pieces[x, y].ID) for x, y in self.pieces]))
-
     def can_move(self, x, y, dx, dy):
         return self.pieces[x, y].can_move(self, dx, dy)
 
@@ -121,3 +118,6 @@ class ChessBoard:
         new_board.pieces.clear()
         new_board.pieces = copy.deepcopy(self.pieces)
         return new_board
+
+    def hash(self, is_red):
+        return hash(frozenset([(x, y, self.pieces[x, y].ID) for x, y in self.pieces])), is_red
