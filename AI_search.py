@@ -52,9 +52,9 @@ class AI_search(AI_base):
         hash_val = self.get_hash(board, is_red)
         if hash_val in self.visited:
             return self.visited[hash_val]
-        if len(board.pieces) > 20:
+        if len(board.pieces) > 18:
             value, move = self.dfs(board, self.max_depth - 1, -Const.inf, Const.inf, is_red)
-        elif len(board.pieces) > 12:
+        elif len(board.pieces) > 10:
             value, move = self.dfs(board, self.max_depth, -Const.inf, Const.inf, is_red)
         else:
             value, move = self.dfs(board, self.max_depth + 1, -Const.inf, Const.inf, is_red)
