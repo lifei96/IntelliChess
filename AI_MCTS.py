@@ -8,7 +8,7 @@ import random
 
 class AI_MCTS(AI_base):
 
-    def __init__(self, C=0.9, time_limit=5, R=15, E=5):
+    def __init__(self, C=0.9, time_limit=5, R=30, E=5):
         AI_base.__init__(self)
         self.C = C
         self.time_limit = time_limit
@@ -247,7 +247,8 @@ class AI_MCTS(AI_base):
         return eval_sum
 
     def eval_move(self, board, move, is_red):
-        val = self.position_eval[board.pieces[move[0], move[1]].name][move[0] + move[2]][move[1] + move[3]]*10
+        val = (self.position_eval[board.pieces[move[0], move[1]].name][move[0] + move[2]][move[1] + move[3]] -
+               self.position_eval[board.pieces[move[0], move[1]].name][move[0]][move[1]])*10
         if is_red:
             val += move[3] * 10 + abs(move[2])
         else:

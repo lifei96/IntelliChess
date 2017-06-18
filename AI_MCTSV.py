@@ -47,7 +47,8 @@ class AI_MCTSV(AI_base):
         return eval_sum
 
     def eval_move(self, board, move, is_red):
-        val = self.position_eval[board.pieces[move[0], move[1]].name][move[0] + move[2]][move[1] + move[3]]*10
+        val = (self.position_eval[board.pieces[move[0], move[1]].name][move[0] + move[2]][move[1] + move[3]] -
+               self.position_eval[board.pieces[move[0], move[1]].name][move[0]][move[1]])*10
         if is_red:
             val += move[3] * 10 + abs(move[2])
         else:
@@ -58,7 +59,7 @@ class AI_MCTSV(AI_base):
         return val
 
     def eval_draw(self, board):
-        tot = 2000.0
+        tot = 2200.0
         val = self.eval_board(board)
         val_norm = math.sqrt(min(abs(val) / tot, 1.0)) * 0.5
         if val >= 0:
