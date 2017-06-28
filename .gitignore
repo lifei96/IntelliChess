@@ -90,3 +90,6 @@ ENV/
 
 GameLog.txt
 results/
+figures/
+stat/
+README.txt

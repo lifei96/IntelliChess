@@ -4,6 +4,7 @@ from AIDict import *
 import time
 import Const
 import argparse
+import numpy as np
 
 
 def real_coord(x):
@@ -26,6 +27,8 @@ class ChessGame:
     AI_red = None
     AI_green = None
     AI_dict = AIDict()
+    time_red = []
+    time_green = []
 
     def __init__(self):
         self.view = ChessView(self)
@@ -110,7 +113,15 @@ class ChessGame:
             self.view.root.update()
             print '*****\n*****'
             with open('GameLog.txt', 'a') as f:
-                f.write('%d\t%d\n' % (0, self.cur_round))
+                if len(self.time_red) > 0:
+                    avg_red = np.mean(self.time_red)
+                else:
+                    avg_red = 0.0
+                if len(self.time_green) > 0:
+                    avg_green = np.mean(self.time_green)
+                else:
+                    avg_green = 0.0
+                f.write('%d\t%d\t%f\t%f\n' % (0, self.cur_round, avg_red, avg_green))
             return True
         elif not green_king:
             print '*****\n*****'
@@ -118,7 +129,31 @@ class ChessGame:
             self.view.root.update()
             print '*****\n*****'
             with open('GameLog.txt', 'a') as f:
-                f.write('%d\t%d\n' % (1, self.cur_round))
+                if len(self.time_red) > 0:
+                    avg_red = np.mean(self.time_red)
+                else:
+                    avg_red = 0.0
+                if len(self.time_green) > 0:
+                    avg_green = np.mean(self.time_green)
+                else:
+                    avg_green = 0.0
+                f.write('%d\t%d\t%f\t%f\n' % (1, self.cur_round, avg_red, avg_green))
+            return True
+        elif self.cur_round >= 200:
+            print '*****\n*****'
+            self.view.showMsg('*****Draw at Round %d*****' % self.cur_round)
+            self.view.root.update()
+            print '*****\n*****'
+            with open('GameLog.txt', 'a') as f:
+                if len(self.time_red) > 0:
+                    avg_red = np.mean(self.time_red)
+                else:
+                    avg_red = 0.0
+                if len(self.time_green) > 0:
+                    avg_green = np.mean(self.time_green)
+                else:
+                    avg_green = 0.0
+                f.write('%f\t%d\t%f\t%f\n' % (0.5, self.cur_round, avg_red, avg_green))
             return True
         return False
 
@@ -148,7 +183,12 @@ class ChessGame:
         print '...AI is calculating...'
         START_TIME = time.clock()
         move = AI.select_move(self.board, self.player_is_red)
-        print '...Use %fs...' % (time.clock() - START_TIME)
+        time_used = time.clock() - START_TIME
+        print '...Use %fs...' % time_used
+        if self.player_is_red:
+            self.time_red.append(time_used)
+        else:
+            self.time_green.append(time_used)
         if move is not None:
             self.board.move(move[0], move[1], move[2], move[3])
         else:
